@@ -1,0 +1,171 @@
+﻿@using Tarea_2_2_2021.Models;
+@using Tarea_2_2_2021.BLL;
+
+@page "/Usuarios"
+@page "/Usuarios/{UsuarioId:int}"
+
+<EditForm Model="Usuarios" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+
+    <div class="card-header justify-content-center">
+        <h3>Registro de Usuarios</h3>
+    </div>
+
+    <br />
+
+    <form>
+
+        @*UsuarioId*@
+        <div class="form-row justify-content-center">
+            <div class="col">
+
+                <div class="form-group">
+
+                    <label class="form-label">ID</label>
+
+                    <div class="input-group">
+
+                        <InputNumber @bind-Value="Usuarios.UsuarioId" class="form-control col-5" />
+
+                        <div class="input-group-append">
+                            <button class="btn btn-success" type="button" @onclick="Buscar">Buscar <span class="glyphicon glyphicon-search"></span> </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        @*Nombre*@
+        <div class="form-group">
+
+            <label>Nombre</label>
+
+            <InputText @bind-Value="Usuarios.Nombre" class="form-control col-6" />
+
+            <ValidationMessage For="@(() => Usuarios.Nombre)" />
+
+        </div>
+
+        @*Telefono*@
+        <div class="form-group">
+
+            <label>Teléfono</label>
+
+            <InputText @bind-Value="Usuarios.Telefono" class="form-control col-6" pattern="^\d{3}-\d{3}-\d{4}$" required />
+
+        </div>
+
+        @*Cedula*@
+        <div class="form-group">
+
+            <label>Cedula</label>
+
+            <InputText @bind-Value="Usuarios.Cedula" class="form-control col-6" pattern="^\d{3}-\d{7}-\d{1}$" required />
+
+        </div>
+
+        @*Direccion*@
+        <div class="form-group">
+
+            <label>Dirección</label>
+
+            <InputText @bind-Value="Usuarios.Direccion" class="form-control col-6" />
+
+            <ValidationMessage For="@(() => Usuarios.Direccion)" />
+
+        </div>
+
+        @*FechaNacimiento*@
+        <div class="form-group">
+            <label>Fecha De Nacimiento</label>
+            <InputDate @bind-Value="Usuarios.FechaNacimiento" class="form-control col-6" />
+            <ValidationMessage For="@(() => Usuarios.FechaNacimiento)" />
+        </div>
+
+        @*Botones*@
+        <div class="row">
+
+            <div class="col-2 d-grid gap-2">
+                <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo"> <span class="glyphicon glyphicon-plus"></span> Nuevo </button>
+            </div>
+
+            <div class="col-2 d-grid gap-2">
+                <button type="submit" class="btn btn-lg btn-success" @onclick="Guardar"> <span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button>
+            </div>
+
+            <div class="col-2 d-grid gap-2">
+                <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar"> <span class="glyphicon glyphicon-trash"></span> Eliminar</button>
+            </div>
+
+        </div>
+
+        <br />
+
+    </form>
+
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public int UsuarioId { get; set; }
+
+    private Usuarios Usuarios = new Usuarios();
+
+    protected override void OnInitialized()
+    {
+        Nuevo(); //siempre se hace nuevo
+
+        Buscar(); //solo hace efecto si se paso un id por parametro
+    }
+
+    public void Nuevo()
+    {
+        Usuarios = new Usuarios();
+    }
+
+    private void Buscar()
+    {
+        if (Usuarios.UsuarioId > 0)
+        {
+            var encontrado = UsuariosBLL.Buscar(Usuarios.UsuarioId);
+
+            if (encontrado != null)
+                this.Usuarios = encontrado;
+            //else
+            //toast.ShowWarning("No encontrado");
+        }
+    }
+
+    public void Guardar()
+    {
+        bool esguardo;
+
+        esguardo = UsuariosBLL.Guardar(Usuarios);
+
+        if (esguardo)
+        {
+            Nuevo();
+            //toast.ShowSuccess("Guardado correctamente");
+        }
+        //else
+        //toast.ShowError("No fue posible guardar");
+    }
+
+    public void Eliminar()
+    {
+        bool esElimino;
+
+        esElimino = UsuariosBLL.Eliminar(Usuarios.UsuarioId);
+
+        if (esElimino)
+        {
+            Nuevo();
+            //toast.ShowSuccess("Eliminado correctamente");
+        }
+        //else
+        // toast.ShowError("No fue posible eliminar");
+    }
+
+}
