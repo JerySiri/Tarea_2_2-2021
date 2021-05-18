@@ -4,7 +4,7 @@
 @page "/Usuarios"
 @page "/Usuarios/{UsuarioId:int}"
 
-
+@inject IToastService toast
 
 <EditForm Model="Usuarios" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
@@ -150,8 +150,8 @@
 
             if (encontrado != null)
                 this.Usuarios = encontrado;
-            //else
-               // toast.ShowWarning("No encontrado");
+            else
+                toast.ShowWarning("No encontrado");
         }
     }
 
@@ -164,10 +164,10 @@
         if (esguardo)
         {
             Nuevo();
-            //toast.ShowSuccess("Guardado correctamente");
+            toast.ShowSuccess("Guardado correctamente");
         }
-        //else
-           // toast.ShowError("No fue posible guardar");
+        else
+            toast.ShowError("No fue posible guardar");
     }
 
     public void Eliminar()
@@ -179,10 +179,10 @@
         if (esElimino)
         {
             Nuevo();
-          //  toast.ShowSuccess("Eliminado correctamente");
+            toast.ShowSuccess("Eliminado correctamente");
         }
-       // else
-        //    toast.ShowError("No fue posible eliminar");
+        else
+           toast.ShowError("No fue posible eliminar");
     }
 
 }

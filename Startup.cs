@@ -34,6 +34,7 @@ namespace Tarea_2_2_2021
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
+         
             services.AddBlazoredToast();
         }
 
