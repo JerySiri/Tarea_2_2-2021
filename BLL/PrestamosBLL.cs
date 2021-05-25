@@ -1,23 +1,22 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Tarea_2_2_2021.Models;
-using Tarea_2_2_2021.DAL;
-using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
+using Tarea_2_2_2021.DAL;
+using Tarea_2_2_2021.Models;
 
 namespace Tarea_2_2_2021.BLL
 {
-    public class UsuariosBLL
+    public class PrestamosBLL
     {
-        
-        public static bool Guardar(Usuarios user)
+        public static bool Guardar(Prestamos prestamo)
         {
-            if (!Existe(user.UsuarioId))
-                return Insertar(user);
+            if (!Existe(prestamo.PrestamoId))
+                return Insertar(prestamo);
             else
-                return Modificar(user);
+                return Modificar(prestamo);
         }
 
         public static bool Existe(int id)
@@ -27,7 +26,7 @@ namespace Tarea_2_2_2021.BLL
 
             try
             {
-                encontrado = contexto.Usuarios.Any(e => e.UsuarioId == id);
+                encontrado = contexto.Prestamos.Any(e => e.PrestamoId == id);
             }
             catch (Exception)
             {
@@ -41,13 +40,13 @@ namespace Tarea_2_2_2021.BLL
             return encontrado;
         }
 
-        public static bool Modificar(Usuarios user)
+        public static bool Modificar(Prestamos prestamo)
         {
             bool paso = false;
             Contexto contexto = new Contexto();
             try
             {
-                contexto.Entry(user).State = EntityState.Modified;
+                contexto.Entry(prestamo).State = EntityState.Modified;
                 paso = contexto.SaveChanges() > 0;
             }
             catch (Exception)
@@ -61,14 +60,14 @@ namespace Tarea_2_2_2021.BLL
             return paso;
         }
 
-        private static bool Insertar(Usuarios user)
+        private static bool Insertar(Prestamos prestamo)
         {
             bool paso = false;
             Contexto contexto = new Contexto();
 
             try
             {
-                contexto.Usuarios.Add(user);
+                contexto.Prestamos.Add(prestamo);
                 paso = contexto.SaveChanges() > 0;
             }
             catch (Exception)
@@ -90,11 +89,11 @@ namespace Tarea_2_2_2021.BLL
             try
             {
                 //buscar la entidad que se desea eliminar
-                var user = contexto.Usuarios.Find(id);
+                var prestamo = contexto.Prestamos.Find(id);
 
-                if (user != null)
+                if (prestamo != null)
                 {
-                    contexto.Usuarios.Remove(user);//remover la entidad
+                    contexto.Prestamos.Remove(prestamo);//remover la entidad
                     paso = contexto.SaveChanges() > 0;
                 }
             }
@@ -110,14 +109,14 @@ namespace Tarea_2_2_2021.BLL
             return paso;
         }
 
-        public static Usuarios Buscar(int id)
+        public static Prestamos Buscar(int id)
         {
             Contexto contexto = new Contexto();
-            Usuarios user;
+            Prestamos prestamo;
 
             try
             {
-                user = contexto.Usuarios.Find(id);
+                prestamo = contexto.Prestamos.Find(id);
             }
             catch (Exception)
             {
@@ -128,17 +127,18 @@ namespace Tarea_2_2_2021.BLL
                 contexto.Dispose();
             }
 
-            return user;
+            return prestamo;
         }
 
-        public static List<Usuarios> GetList(Expression<Func<Usuarios, bool>> criterio)
+        public static List<Prestamos> GetList(Expression<Func<Prestamos, bool>> criterio)
         {
-            List<Usuarios> lista = new List<Usuarios>();
+            List<Prestamos> lista = new List<Prestamos>();
             Contexto contexto = new Contexto();
+
             try
             {
                 //obtener la lista y filtrarla según el criterio recibido por parametro.
-                lista = contexto.Usuarios.Where(criterio).ToList();
+                lista = contexto.Prestamos.Where(criterio).ToList();
             }
             catch (Exception)
             {
@@ -151,13 +151,13 @@ namespace Tarea_2_2_2021.BLL
             return lista;
         }
 
-        public static List<Usuarios> GetUsuario()
+        public static List<Prestamos> GetPrestamos()
         {
-            List<Usuarios> lista = new List<Usuarios>();
+            List<Prestamos> lista = new List<Prestamos>();
             Contexto contexto = new Contexto();
             try
             {
-                lista = contexto.Usuarios.ToList();
+                lista = contexto.Prestamos.ToList();
             }
             catch (Exception)
             {
@@ -169,6 +169,5 @@ namespace Tarea_2_2_2021.BLL
             }
             return lista;
         }
-
     }
 }

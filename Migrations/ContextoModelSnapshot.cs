@@ -16,11 +16,41 @@ namespace Tarea_2_2_2021.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.6");
 
+            modelBuilder.Entity("Tarea_2_2_2021.Models.Prestamos", b =>
+                {
+                    b.Property<int>("PrestamoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<float>("Balance")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Concepto")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("TEXT");
+
+                    b.Property<float>("Monto")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("PrestamoId");
+
+                    b.ToTable("Prestamos");
+                });
+
             modelBuilder.Entity("Tarea_2_2_2021.Models.Usuarios", b =>
                 {
                     b.Property<int>("UsuarioId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<float>("Balance")
+                        .HasColumnType("REAL");
 
                     b.Property<string>("Cedula")
                         .IsRequired()

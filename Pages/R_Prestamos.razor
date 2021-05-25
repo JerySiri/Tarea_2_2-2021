@@ -1,23 +1,22 @@
 ﻿@using Tarea_2_2_2021.Models;
 @using Tarea_2_2_2021.BLL;
 
-@page "/Usuarios"
-@page "/Usuarios/{UsuarioId:int}"
+@page "/Prestamos"
+@page "/Prestamos/{PrestamoId:int}"
 
 @inject IToastService toast
 
-<EditForm Model="Usuarios" OnValidSubmit="Guardar">
+<EditForm Model="Prestamos" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
 
     <div class="card-header justify-content-center">
-        <h3>Registro de Usuarios</h3>
+        <h3>Registro de Prestamos</h3>
     </div>
 
-    <br />
-
     <form>
+        <br />
 
-        @*UsuarioId*@
+        @*PrestamosId*@
         <div class="form-row justify-content-center">
             <div class="col">
 
@@ -26,7 +25,7 @@
                     <label class="form-label">ID</label>
 
                     <div class="input-group ">
-                        <InputNumber @bind-Value="Usuarios.UsuarioId" class="form-control col-5" />
+                        <InputNumber @bind-Value="Prestamos.PrestamoId" class="form-control col-5" />
 
                         <div class="input-group-append">
                             <button class="btn btn-info" type="button" @onclick="Buscar">
@@ -41,58 +40,52 @@
             </div>
         </div>
 
-        @*Nombre*@
+        @*Fecha*@
+        <div class="form-group">
+            <label>Fecha</label>
+            <InputDate @bind-Value="Prestamos.FechaCreacion" class="form-control col-6" />
+        </div>
+
+        @*PersonaId*@
+        <div class="form-group">
+            <label>Usuario</label>
+            <div>
+                <InputSelect @bind-Value="Prestamos.UsuarioId" class="custom-select form-control col-6">
+
+                    @foreach (var dept in UsuariosBLL.GetUsuario())
+                    {
+                        <option value="@dept.UsuarioId">@dept.Nombre</option>
+
+                    }
+
+                </InputSelect>
+                <ValidationMessage For="@(() => Prestamos.UsuarioId)" />
+            </div>
+        </div>
+
+        @*Concepto*@
         <div class="form-group">
 
-            <label>Nombre</label>
+            <label>Concepto</label>
 
-            <InputText @bind-Value="Usuarios.Nombre" class="form-control col-6" />
-            <ValidationMessage For="(() => Usuarios.Nombre)" />
+            <InputText @bind-Value="Prestamos.Concepto" class="form-control col-6" />
+            <ValidationMessage For="@(() => Prestamos.Concepto)" />
 
         </div>
 
-        @*Telefono*@
+        @*Monto*@
         <div class="form-group">
 
-            <label>Teléfono</label>
+            <label>Monto</label>
+            <InputNumber @bind-Value="Prestamos.Monto" class="form-control col-6" />
 
-            <InputText @bind-Value="@Usuarios.Telefono" class="form-control col-6" />
-            <ValidationMessage For="@(() => Usuarios.Telefono)" />
-        </div>
-
-        @*Cedula*@
-        <div class="form-group">
-
-            <label>Cédula</label>
-
-            <InputText @bind-Value="Usuarios.Cedula" class="form-control col-6" />
-            <ValidationMessage For="@(() => Usuarios.Cedula)" />
-        </div>
-
-        @*Direccion*@
-        <div class="form-group">
-
-            <label>Dirección</label>
-
-            <InputText @bind-Value="@Usuarios.Direccion" class="form-control col-6" />
-            <ValidationMessage For="@(() => Usuarios.Direccion)" />
-
-        </div>
-
-        @*FechaNacimiento*@
-        <div class="form-group">
-
-            <label>Fecha De Nacimiento</label>
-            <InputDate @bind-Value="Usuarios.FechaNacimiento" class="form-control col-6" />
-            <ValidationMessage For="@(() => Usuarios.FechaNacimiento)" />
-        
         </div>
 
         @*Balance*@
         <div class="form-group">
 
             <label>Balance</label>
-            <InputNumber readonly @bind-Value="Usuarios.Balance" class="form-control col-6" />
+            <InputNumber @bind-Value="Prestamos.Balance" class="form-control col-6" />
 
         </div>
 
@@ -100,16 +93,16 @@
         <div class="row">
 
             <div class="col-2 d-grid gap-2">
-            
+
                 <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo">
-                   
+
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
                         <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
                         <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
                     </svg> Nuevo
-                
+
                 </button>
-            
+
             </div>
 
             <div class="col-2 d-grid gap-2">
@@ -136,54 +129,54 @@
 
     </form>
 
-
 </EditForm>
+
 
 @code {
     [Parameter]
-    public int UsuarioId { get; set; }
+    public int PrestamoId { get; set; }
 
-    private Usuarios Usuarios = new Usuarios();
+    private Prestamos Prestamos = new Prestamos();
 
     protected override void OnInitialized()
     {
         Nuevo(); //siempre se hace nuevo
 
-        Buscar(); //solo hace efecto si se paso un id por parametro
     }
 
     public void Nuevo()
     {
-        Usuarios = new Usuarios();
+        Prestamos = new Prestamos();
     }
 
     private void Buscar()
     {
-        if (Usuarios.UsuarioId > 0 && UsuariosBLL.Existe(Usuarios.UsuarioId))
+        if (Prestamos.PrestamoId > 0 && PrestamosBLL.Existe(Prestamos.PrestamoId))
         {
-            var encontrado = UsuariosBLL.Buscar(Usuarios.UsuarioId);
+            var encontrado = PrestamosBLL.Buscar(Prestamos.PrestamoId);
 
             if (encontrado != null)
-            {
-                this.Usuarios = encontrado;
-                ActualizarBalanceDelUsuario();
-            }
-
+                this.Prestamos = encontrado;
             else
                 toast.ShowWarning("No encontrado");
         }
+        else
+            toast.ShowWarning("No existe Prestamo con ese Id");
     }
 
     public void Guardar()
     {
         bool fueGuardado;
 
-        fueGuardado = UsuariosBLL.Guardar(Usuarios);
+        if (!Validar())
+            return;
+
+        fueGuardado = PrestamosBLL.Guardar(Prestamos);
 
         if (fueGuardado)
         {
-            Nuevo();
             toast.ShowSuccess("Guardado correctamente");
+            Nuevo();
         }
         else
             toast.ShowError("No fue posible guardar");
@@ -193,33 +186,21 @@
     {
         bool paso = true;
 
-        if (Usuarios.UsuarioId < 0)
+        if (Prestamos.UsuarioId <= 0)
+        {
+            toast.ShowError("Debe elegir un usuario para el prestamo");
+            paso = false;
+        }
+
+        if (String.IsNullOrWhiteSpace(Prestamos.Concepto))
+        {
+            toast.ShowError("El campo Concepto no puede esta vacio");
+            paso = false;
+        }
+
+        if (Prestamos.PrestamoId < 0)
         {
             toast.ShowError("El campo Id no puede ser de valor negativo");
-            paso = false;
-        }
-
-        if (String.IsNullOrWhiteSpace(Usuarios.Nombre))
-        {
-            toast.ShowError("El campo Nombre no puede esta vacio");
-            paso = false;
-        }
-
-        if (String.IsNullOrWhiteSpace(Usuarios.Telefono))
-        {
-            toast.ShowError("El campo Teléfono no puede esta vacio");
-            paso = false;
-        }
-
-        if (String.IsNullOrWhiteSpace(Usuarios.Cedula))
-        {
-            toast.ShowError("El campo Cédula no puede esta vacio");
-            paso = false;
-        }
-
-        if (String.IsNullOrWhiteSpace(Usuarios.Direccion))
-        {
-            toast.ShowError("El campo Dirección no puede esta vacio");
             paso = false;
         }
 
@@ -230,24 +211,14 @@
     {
         bool esElimino;
 
-        esElimino = UsuariosBLL.Eliminar(Usuarios.UsuarioId);
+        esElimino = PrestamosBLL.Eliminar(Prestamos.PrestamoId);
 
         if (esElimino)
         {
-            Nuevo();
             toast.ShowSuccess("Eliminado correctamente");
+            Nuevo();
         }
         else
             toast.ShowError("No fue posible eliminar");
     }
-
-    public void ActualizarBalanceDelUsuario()
-    {
-        foreach (var ListaDeBalances in PrestamosBLL.GetList(consultaDeLosPrestamosDeEsteUsuario => consultaDeLosPrestamosDeEsteUsuario.UsuarioId == Usuarios.UsuarioId))
-        {
-            Usuarios.Balance += ListaDeBalances.Balance;
-        }
-
-    }
-
 }

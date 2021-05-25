@@ -9,8 +9,8 @@ namespace Tarea_2_2_2021.Models
     	public int UsuarioId { get; set; }
 
     	[Required(ErrorMessage ="Es obligatorio introducir el nombre")]
-    	public string Nombre { get; set; }
-
+        public string Nombre { get; set; }
+        
     	[Required(ErrorMessage ="Es obligatorio introducir el telefono")]
     	public string Telefono { get; set; }
 
@@ -20,6 +20,8 @@ namespace Tarea_2_2_2021.Models
     	[Required(ErrorMessage ="Es obligatorio introducir el dirección")]
     	public string Direccion {get; set; }
 
-    	public DateTime FechaNacimiento { get; set; }
+        public DateTime FechaNacimiento { get; set; } = DateTime.Now;
+
+        public float Balance { get; set; } = 0;
     }
 }

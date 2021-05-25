@@ -11,6 +11,8 @@ namespace Tarea_2_2_2021.DAL
     {
         public DbSet<Usuarios> Usuarios { get; set; }
 
+        public DbSet<Prestamos> Prestamos { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite(@"Data Source= Data\Registros.db");
