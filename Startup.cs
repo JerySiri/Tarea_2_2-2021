@@ -12,7 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Tarea_2_2_2021.DAL;
-using Tarea_2_2_2021.Data;
 
 namespace Tarea_2_2_2021
 {
@@ -33,7 +32,6 @@ namespace Tarea_2_2_2021
            
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
             services.AddBlazoredToast();
         }
 
