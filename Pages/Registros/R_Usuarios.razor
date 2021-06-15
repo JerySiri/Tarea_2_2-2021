@@ -168,43 +168,6 @@
             toast.ShowError("No fue posible guardar");
     }
 
-    public bool Validar()
-    {
-        bool paso = true;
-
-        if (Usuarios.UsuarioId < 0)
-        {
-            toast.ShowError("El campo Id no puede ser de valor negativo");
-            paso = false;
-        }
-
-        if (String.IsNullOrWhiteSpace(Usuarios.Nombre))
-        {
-            toast.ShowError("El campo Nombre no puede esta vacio");
-            paso = false;
-        }
-
-        if (String.IsNullOrWhiteSpace(Usuarios.Telefono))
-        {
-            toast.ShowError("El campo Teléfono no puede esta vacio");
-            paso = false;
-        }
-
-        if (String.IsNullOrWhiteSpace(Usuarios.Cedula))
-        {
-            toast.ShowError("El campo Cédula no puede esta vacio");
-            paso = false;
-        }
-
-        if (String.IsNullOrWhiteSpace(Usuarios.Direccion))
-        {
-            toast.ShowError("El campo Dirección no puede esta vacio");
-            paso = false;
-        }
-
-        return paso;
-    }
-
     public void Eliminar()
     {
         bool esElimino;

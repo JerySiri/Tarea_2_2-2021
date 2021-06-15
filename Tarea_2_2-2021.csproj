@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Data\Registros.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

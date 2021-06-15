@@ -1,0 +1,265 @@
+﻿@using Tarea_2_2_2021.Models;
+@using Tarea_2_2_2021.BLL;
+
+@page "/Moras"
+@page "/Moras/{MoraId:int}"
+
+@inject IToastService toast
+
+<EditForm Model="Moras" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+
+    <div class="card">
+
+        <div class="card-header justify-content-center">
+            <h3>Registro de Moras</h3>
+        </div>
+
+        <div class="card-body">
+
+            @*MoraId y Boton Buscar*@
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+
+                        <label class="form-label">ID</label>
+                        <div class="input-group ">
+                            <InputNumber @bind-Value="Moras.MoraId" class="form-control col-5" />
+
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-info" @onclick="Buscar">
+                                    <i class="oi oi-magnifying-glass" />
+                                    Buscar
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            @*Fecha*@
+            <div class="form-group">
+
+                <label>Fecha</label>
+                <InputDate @bind-Value="Moras.Fecha" class="form-control col-6" />
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Moras : </label>
+
+            </div>
+
+
+            <div class="card-body border bg-info">
+
+                <div class="row ">
+
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label class="font-weight-bold">Prestamos</label>
+                            <div>
+                                <InputSelect @bind-Value="MorasDetalle.PrestamoId" class="custom-select form-control" required>
+                                    <option>Seleccione un Prestamo</option>
+
+                                    @foreach (var prestamosLista in PrestamosBLL.GetPrestamos())
+                                    {
+                                        <option value="@prestamosLista.PrestamoId">@prestamosLista.PrestamoId</option>
+
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => MorasDetalle.PrestamoId)" />
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-4">
+
+                        @*Valor*@
+                        <div class="form-group">
+
+                            <label class="font-weight-bold">Valor</label>
+                            <InputNumber @bind-Value="MorasDetalle.Valor" class="form-control" />
+
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+
+                        @*Boton Agregar*@
+                        <div class="form-group">
+                            <label class="font-weight-bold">Boton</label>
+
+                            <button type="button" class="btn btn-primary btn-block" @onclick="AgregarDetalle">
+                                <i class="oi oi-plus" aria-hidden="true" /> Agregar
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row ">
+                    <div class="col">
+                        @*MorasDetalle*@
+                        <table class="table">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Mora ID</th>
+                                    <th scope="col">Prestamo Id</th>
+                                    <th scope="col">Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Moras.MorasDetalle)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.MoraId</td>
+                                        <td>@item.PrestamoId</td>
+                                        <td>@item.Valor</td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+               
+            </div>
+
+            <div class="card-footer bg-info">
+                @*Total*@
+                
+                <div class="form-group offset-9">
+                    <label class="font-weight-bold">Total</label>
+                    <InputNumber readonly @bind-Value="Moras.Total" class="form-control" />
+
+                </div>
+                 
+            </div>
+
+        </div>
+
+        <div class="card-footer">
+
+            @*Botones*@
+
+            <div class="form-group text-center" display: inline-block>
+
+                <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo">
+                    <i class="oi oi-file mr-2" />
+                    Nuevo
+
+                </button>
+
+                <button type="submit" class="btn btn-lg btn-success">
+                    <i class="oi oi-account-login" style="transform:rotate(90deg)" />
+                    Guardar
+                </button>
+
+                <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar">
+                    <i class="oi oi-trash mr-2" />
+                    Eliminar
+                </button>
+
+            </div>
+        </div>
+
+    </div>
+
+</EditForm>
+    
+@code {
+
+    [Parameter]
+    public int MoraId { get; set; }
+    private Moras Moras { get; set; } = new Moras();
+    public MorasDetalle MorasDetalle { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Nuevo(); //siempre se hace nuevo
+        Buscar();
+    }
+
+    public void Nuevo()
+    {
+        Moras = new Moras();
+        MorasDetalle = new MorasDetalle();
+    }
+
+    private void Buscar()
+    {
+        if (Moras.MoraId > 0)
+        {
+            var encontrado = MorasBLL.Buscar(Moras.MoraId);
+
+            if (encontrado != null)
+            {
+                this.Moras = encontrado;
+            }
+            else
+                toast.ShowWarning("No encontrado");
+        }
+    }
+
+    private void AgregarDetalle()
+    {
+        Moras.MorasDetalle.Add(MorasDetalle);
+
+        MorasDetalle = new MorasDetalle();
+        
+        CalcularTotal();
+
+    }
+
+    public void Guardar()
+    {
+        bool fueGuardado;
+
+        fueGuardado = MorasBLL.Guardar(Moras);
+
+        if (fueGuardado)
+        {
+            Nuevo();
+            toast.ShowSuccess("Guardado correctamente");
+        }
+        else
+            toast.ShowError("No fue posible guardar");
+    }
+
+    public void Eliminar()
+    {
+        bool esElimino;
+
+        esElimino = MorasBLL.Eliminar(Moras.MoraId);
+
+        if (esElimino)
+        {
+            Nuevo();
+            toast.ShowSuccess("Eliminado correctamente");
+        }
+        else
+            toast.ShowError("No fue posible eliminar");
+    }
+
+    private void CalcularTotal()
+    {
+        Moras.Total = 0;
+
+        foreach (var ListaDeMoras in Moras.MorasDetalle)
+        {
+            Moras.Total += ListaDeMoras.Valor;
+
+        }
+
+
+    }
+}

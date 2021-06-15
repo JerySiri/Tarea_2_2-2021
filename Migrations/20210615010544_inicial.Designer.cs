@@ -9,14 +9,54 @@ using Tarea_2_2_2021.DAL;
 namespace Tarea_2_2_2021.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20210525031941_Inicial")]
-    partial class Inicial
+    [Migration("20210615010544_inicial")]
+    partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.6");
+
+            modelBuilder.Entity("Tarea_2_2_2021.Models.Moras", b =>
+                {
+                    b.Property<int>("MoraId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("TEXT");
+
+                    b.Property<float>("Total")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("MoraId");
+
+                    b.ToTable("Moras");
+                });
+
+            modelBuilder.Entity("Tarea_2_2_2021.Models.MorasDetalle", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MoraId")
+                        .IsRequired()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PrestamoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<float>("Valor")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MoraId");
+
+                    b.ToTable("MorasDetalle");
+                });
 
             modelBuilder.Entity("Tarea_2_2_2021.Models.Prestamos", b =>
                 {
@@ -37,7 +77,8 @@ namespace Tarea_2_2_2021.Migrations
                     b.Property<float>("Monto")
                         .HasColumnType("REAL");
 
-                    b.Property<int>("UsuarioId")
+                    b.Property<int?>("UsuarioId")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.HasKey("PrestamoId");
@@ -76,6 +117,20 @@ namespace Tarea_2_2_2021.Migrations
                     b.HasKey("UsuarioId");
 
                     b.ToTable("Usuarios");
+                });
+
+            modelBuilder.Entity("Tarea_2_2_2021.Models.MorasDetalle", b =>
+                {
+                    b.HasOne("Tarea_2_2_2021.Models.Moras", null)
+                        .WithMany("MorasDetalle")
+                        .HasForeignKey("MoraId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tarea_2_2_2021.Models.Moras", b =>
+                {
+                    b.Navigation("MorasDetalle");
                 });
 #pragma warning restore 612, 618
         }

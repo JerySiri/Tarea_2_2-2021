@@ -13,6 +13,10 @@ namespace Tarea_2_2_2021.DAL
 
         public DbSet<Prestamos> Prestamos { get; set; }
 
+        public DbSet<MorasDetalle> MorasDetalle { get; set; }
+
+        public DbSet<Moras> Moras { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite(@"Data Source= Data\Registros.db");
